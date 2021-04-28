@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: natsconsumer
+  labels:
+    app: natsconsumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: natsconsumer
+  template:
+    metadata:
+      labels:
+        app: natsconsumer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+    spec:
+      containers:
+      - name: natsconsumer
+        image: #{REGISTRYHOST}#/natsconsumer:#{Build.BuildId}#
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        envFrom:
+        - configMapRef:
+            name: nats-configmap
+        livenessProbe:
+          httpGet:
+            path: /healthy
+            port: http
+          initialDelaySeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "16m"
+          limits:
+            memory: "128Mi"
+            cpu: "512m"

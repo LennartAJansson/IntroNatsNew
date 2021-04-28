@@ -1,0 +1,65 @@
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      name: 'Local'
+    steps:
+    - task: CmdLine@2
+      inputs:
+        script: |
+          docker build -f .\NatsApi\Dockerfile --force-rm -t natsapi .
+          docker build -f .\NatsConsumer\Dockerfile --force-rm -t natsconsumer .
+          
+          docker tag natsapi:latest registry.local:5000/natsapi:$(Build.BuildId)
+          docker tag natsconsumer:latest registry.local:5000/natsconsumer:$(Build.BuildId)
+          
+          docker tag natsapi:latest registry.local:5000/natsapi:latest
+          docker tag natsconsumer:latest registry.local:5000/natsconsumer:latest
+          
+          docker push registry.local:5000/natsapi:$(Build.BuildId)
+          docker push registry.local:5000/natsconsumer:$(Build.BuildId)
+        workingDirectory: '$(Build.SourcesDirectory)'
+    - task: replacetokens@3
+      inputs:
+        rootDirectory: '$(Build.SourcesDirectory)/Deploy'
+        targetFiles: '**/deployment.yaml'
+        encoding: 'auto'
+        writeBOM: true
+        actionOnMissing: 'warn'
+        keepToken: false
+        tokenPrefix: '#{'
+        tokenSuffix: '}#'
+        useLegacyPattern: false
+        enableTelemetry: true
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(Build.SourcesDirectory)/Deploy'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '**/*.trx'
+        mergeTestResults: true
+        testRunTitle: 'Test run title'
