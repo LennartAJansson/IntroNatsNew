@@ -11,42 +11,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BackgroundService", "Backgr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NatsConsumer", "NatsConsumer\NatsConsumer.csproj", "{56D69B18-8CE9-4207-B334-F2ECF6D46D53}"
 EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{88A45953-BA6C-427A-B236-C89EB9011E18}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yml = azure-pipelines.yml
 		Build.ps1 = Build.ps1
 		Deploy.ps1 = Deploy.ps1
 		DeployNats.ps1 = DeployNats.ps1
-		populate-registry.ps1 = populate-registry.ps1
 		readme.md = readme.md
 		Recreate-Consumer.ps1 = Recreate-Consumer.ps1
 		Recreate-StreamAndSubject.ps1 = Recreate-StreamAndSubject.ps1
 	EndProjectSection
 EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "deploy", "deploy", "{71C8596A-FC98-4907-B94F-4C8F71D93409}"
 EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{C46D5B87-4986-462C-AF63-B8A132C473A9}"
 	ProjectSection(SolutionItems) = preProject
 		deploy\common\configmap.yaml = deploy\common\configmap.yaml
 		deploy\common\kustomization.yaml = deploy\common\kustomization.yaml
 	EndProjectSection
 EndProject
-
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nats", "nats", "{73B6645E-1405-4E8B-AAC5-B21734D2BD4E}"
-	ProjectSection(SolutionItems) = preProject
-		deploy\nats\configmap.yaml = deploy\nats\configmap.yaml
-		deploy\nats\ingress.yaml = deploy\nats\ingress.yaml
-		deploy\nats\kustomization.yaml = deploy\nats\kustomization.yaml
-		deploy\nats\namespace.yaml = deploy\nats\namespace.yaml
-		deploy\nats\nats.conf = deploy\nats\nats.conf
-		deploy\nats\service.yaml = deploy\nats\service.yaml
-		deploy\nats\statefulset.yaml = deploy\nats\statefulset.yaml
-	EndProjectSection
-EndProject
-
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "natsapi", "natsapi", "{BF13C592-9776-46C1-9B49-6FB75F5E6F76}"
 	ProjectSection(SolutionItems) = preProject
 		deploy\natsapi\deployment.yaml = deploy\natsapi\deployment.yaml
@@ -111,7 +94,6 @@ Global
 		{56D69B18-8CE9-4207-B334-F2ECF6D46D53} = {5EAFC033-D09F-48C9-BCCF-1C99DCEBDA54}
 		{71C8596A-FC98-4907-B94F-4C8F71D93409} = {88A45953-BA6C-427A-B236-C89EB9011E18}
 		{C46D5B87-4986-462C-AF63-B8A132C473A9} = {71C8596A-FC98-4907-B94F-4C8F71D93409}
-		{73B6645E-1405-4E8B-AAC5-B21734D2BD4E} = {71C8596A-FC98-4907-B94F-4C8F71D93409}
 		{BF13C592-9776-46C1-9B49-6FB75F5E6F76} = {71C8596A-FC98-4907-B94F-4C8F71D93409}
 		{53FFDCC5-2CC9-4340-A0C2-8A3570195581} = {71C8596A-FC98-4907-B94F-4C8F71D93409}
 		{BAEB3148-3D83-481B-8673-4C37DFE42503} = {71C8596A-FC98-4907-B94F-4C8F71D93409}
