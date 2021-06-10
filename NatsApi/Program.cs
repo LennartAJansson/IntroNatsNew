@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-using NatsApi.Nats;
+using NatsApi.Configurations;
 using NatsApi.Services;
 
 namespace NatsApi
@@ -18,11 +16,9 @@ namespace NatsApi
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .ConfigureServices((context, services) =>
-                {
-                    services.AddSingleton(sp => new NatsConnection(sp.GetService<IConfiguration>().GetValue<string>("NATS_URL")));
-                    services.AddTransient<INatsService, NatsService>();
-                })
+                .ConfigureServices((hostContext, services) => services
+                    .AddApplicationConfigurations(hostContext)
+                    .AddApplicationServices())
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
         }
     }

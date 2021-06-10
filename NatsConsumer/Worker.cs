@@ -20,14 +20,14 @@ namespace NatsConsumer
         private readonly NatsConnection natsConnection;
         private IConnection connection;
         private IAsyncSubscription subscription;
-        private Counter eventCount;
-        private Gauge eventExecuteTime;
+        private readonly Counter eventCount;
+        private readonly Gauge eventExecuteTime;
 
         public Worker(ILogger<Worker> logger, NatsConnection natsConnection)
         {
             this.logger = logger;
             this.natsConnection = natsConnection;
-            eventExecuteTime = Metrics.CreateGauge("nats_event_execute_time", "Counts total execution time for handling NATS message");
+            eventExecuteTime = Metrics.CreateGauge("nats_event_execution_time", "Counts total execution time for handling NATS message");
             eventCount = Metrics.CreateCounter("nats_event_total", "NATS Events Total", new CounterConfiguration
             {
                 LabelNames = new[] { "type", "status" }
@@ -40,9 +40,9 @@ namespace NatsConsumer
             logger.LogInformation("---------------------------------------------------------------");
             logger.LogInformation("-->Connecting to natssamplestream...");
             subscription = connection.SubscribeAsync("natssamplestream.samplesubject.timestamp.received.>");
+            subscription.MessageHandler += SubscriptionArrived;
             logger.LogInformation("-->Connected to natssamplestream!");
             logger.LogInformation("---------------------------------------------------------------");
-            subscription.MessageHandler += SubscriptionArrived;
             subscription.Start();
             return Task.CompletedTask;
         }

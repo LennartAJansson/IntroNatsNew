@@ -9,8 +9,11 @@ namespace NatsApi.Nats
     {
         public static IHost TestConnection(this IHost host)
         {
-            IConnection connection = host.Services.GetRequiredService<NatsConnection>().GetConnection();
-            connection.ResetStats();
+            using (IServiceScope scope = host.Services.CreateScope())
+            {
+                IConnection connection = scope.ServiceProvider.GetRequiredService<NatsConnection>().GetConnection();
+                connection.ResetStats();
+            }
             return host;
         }
     }

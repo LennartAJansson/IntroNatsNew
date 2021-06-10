@@ -32,14 +32,13 @@ namespace NatsApi.Controllers
         [HttpPost]
         public async Task PostAsync([FromBody] NatsPostMessage message)
         {
-            var scheme = this.HttpContext.Request.Scheme;
-            var host = this.HttpContext.Request.Host.Value;
-            var path = this.HttpContext.Request.Path.Value;
+            var scheme = HttpContext.Request.Scheme;
+            var host = HttpContext.Request.Host.Value;
+            var path = HttpContext.Request.Path.Value;
             var url = $"{scheme}://{host}{path}";
-            CloudEvent evt = new CloudEvent(CloudEventsSpecVersion.Default, type: nameof(NatsPostMessage), source: new Uri(url))
+            CloudEvent evt = new(CloudEventsSpecVersion.Default, type: nameof(NatsPostMessage), source: new Uri(url))
             {
                 DataContentType = new ContentType("application/json; charset=UTF-8"),
-
                 //evt.DataSchema
                 //evt.Extensions
                 Subject = "natssamplestream.samplesubject.timestamp.received",
@@ -47,19 +46,5 @@ namespace NatsApi.Controllers
             };
             await service.SendAsync(evt);
         }
-
-        //[HttpGet]
-        //public ContentResult Index()
-        //{
-        //    IConnection connection = natsConnection.GetConnection();
-        //    connection.Publish($"natssamplestream.samplesubject.timestamp.received.{(DateTime.Now).ToString("yyyyMMddHHmmssffff")}", Encoding.UTF8.GetBytes("[MESSAGE]: Hello!, Sent: " + DateTimeOffset.Now));
-        //    logger.LogInformation("-->Sending data to 'natssamplestream' at: " + DateTimeOffset.Now);
-
-        //    return new ContentResult
-        //    {
-        //        ContentType = "text/html",
-        //        Content = $"<head><title>NatsMessageController</title></head><h1>NatsMessageController</h1><p>[MESSAGE]: Hello!, Sent: {DateTimeOffset.Now} to 'natssamplestream'</p>"
-        //    };
-        //}
     }
 }

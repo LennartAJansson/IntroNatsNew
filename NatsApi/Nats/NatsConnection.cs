@@ -11,23 +11,23 @@ namespace NatsApi.Nats
 {
     public class NatsConnection : IDisposable
     {
-        private const string CLIENTCERT = "./tls/nats.pfx";
-        private const string SERVERCERT = "./tls/servercert";
-        private const string PASSWORD = "insecurePassword1";
+        private const string clientCertificatePath = "./tls/nats.pfx";
+        private const string serverCertificatePath = "./tls/servercert";
+        private const string password = "insecurePassword1";
 
         private readonly string clientCert;
         private readonly string serverCert;
 
         private readonly Options options;
-        private readonly ConnectionFactory factory = new ConnectionFactory();
+        private readonly ConnectionFactory factory = new();
         private readonly IConnection connection = null;
-        private bool _disposed = false;
+        private bool disposed = false;
 
         public NatsConnection(string connectionString)
         {
             string workingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            clientCert = Path.GetFullPath(Path.Combine(workingDirectory, CLIENTCERT));
-            serverCert = Path.GetFullPath(Path.Combine(workingDirectory, SERVERCERT));
+            clientCert = Path.GetFullPath(Path.Combine(workingDirectory, clientCertificatePath));
+            serverCert = Path.GetFullPath(Path.Combine(workingDirectory, serverCertificatePath));
 
             options = ConnectionFactory.GetDefaultOptions();
             options.Url = connectionString;
@@ -37,7 +37,7 @@ namespace NatsApi.Nats
             if (File.Exists(serverCert))
             {
                 options.Secure = true;
-                X509Certificate2 cert = new X509Certificate2(clientCert, PASSWORD);
+                X509Certificate2 cert = new(clientCert, password);
                 options.AddCertificate(cert);
                 options.TLSRemoteCertificationValidationCallback = TLSRemoteCertificationValidationCallback;
             }
@@ -70,7 +70,7 @@ namespace NatsApi.Nats
                 return true;
             }
 
-            X509Certificate cert = new X509Certificate(serverCert);
+            X509Certificate cert = new(serverCert);
 
             return cert.Issuer.Equals(certificate.Issuer);
         }
@@ -92,7 +92,7 @@ namespace NatsApi.Nats
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed)
+            if (disposed)
             {
                 return;
             }
@@ -103,7 +103,7 @@ namespace NatsApi.Nats
                 connection?.Dispose();
             }
 
-            _disposed = true;
+            disposed = true;
         }
     }
 }
