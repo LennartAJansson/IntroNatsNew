@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: natsconsumer
-        image: #{REGISTRYHOST}#/natsconsumer:#{Build.BuildId}#
+        image: k3d-k3slocal-registry:5000/natsconsumer:#{Build.BuildId}#
         imagePullPolicy: Always
         ports:
         - containerPort: 80

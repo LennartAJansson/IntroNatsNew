@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: userlogintest
-  name: userlogintest
+  namespace: natsapi
+  name: natsapi
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:

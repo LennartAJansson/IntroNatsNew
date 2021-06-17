@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: natsapi
-        image: #{REGISTRYHOST}#/natsapi:#{Build.BuildId}#
+        image: #k3d-k3slocal-registry:5000/natsapi:#{Build.BuildId}#
         imagePullPolicy: Always
         ports:
         - containerPort: 80
