@@ -16,7 +16,6 @@ $files = Get-ChildItem -Path $tempDir\*.yaml -Recurse -Force
 
 foreach ($file in $files) {
 	$content = Get-Content -Path $file
-	$content = $content -replace '#{REGISTRYHOST}#', $registryHost
 	$content = $content -replace '#{Build.BuildId}#', 'latest'
 	$content | Set-Content -Path $file
 }
