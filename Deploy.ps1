@@ -21,7 +21,7 @@ foreach ($file in $files) {
 	$content | Set-Content -Path $file
 }
 
-kubectl delete -k $tempDir/all
+#kubectl delete -k $tempDir/all
 
 kubectl apply -k $tempDir/all
 
